@@ -7,8 +7,9 @@ Por gentiliza, escolha uma operação:
 [d] - Depósito
 [s] - Saque
 [e] - Extrato
-[cu] - Criar Usuário
-[cc] - Criar Conta
+[nu] - Novo Usuário
+[nc] - Nova Conta
+[lc] - Listar Contas
 [q] - Sair
 ------------------------------------
 """
@@ -22,7 +23,9 @@ limite__qtd_saques = 3
 usuarios = []
 contas = []
 AGENCIA = "0001"
-conta = 1
+num_conta = 1
+
+# ---- Funções utilizadas no código -------
 
 def depositar(valor, saldo, extrato, /):
     if valor > 0:
@@ -69,25 +72,35 @@ def criar_usuario():
     else:
         print("Usuário já existe.")        
 
-def criar_conta(agencia, conta, cpf_usuario):
-
-    usuario = consulta_usuario(cpf_usuario)
-
+def criar_conta(agencia, numero_conta, usuario):
     if usuario:
-        print("Usuario existente. Criaremos a conta.")
-        print(agencia, conta)
+        global num_conta
+        contas.append({"agencia": agencia, "conta": numero_conta, "usuario": usuario[0]})
+        print("Conta criada com sucesso.")
+        num_conta += 1
     else:
-        print("Primeiro, crie o usuário.")
+        print("Usuário não cadastrado.")
 
 def consulta_usuario(cpf):
     usuario = []
     for i in usuarios:
         if i["cpf"] == cpf:
             usuario.append(i)
-        else:
-            return
-        return usuario
-    
+
+    return usuario
+
+def listar_contas():
+    for conta in contas:
+        dados_conta = f"""
+            Agência:{conta['agencia']}
+            C/C:{conta['conta']}
+            Titular:{conta['usuario']['nome']}            
+"""
+        print('-'*36)
+        print(dados_conta)
+
+# Código principal
+
 while True:
 
     # Leitura da operação que será executada.
@@ -97,13 +110,6 @@ while True:
     if op.lower() == 'q':
         break
 
-    elif op.lower() == 'cu':
-        criar_usuario()
-
-    elif op.lower() == 'cc':
-        cpf_usuario = input("Informe o CPF do usuário:")
-        criar_conta(AGENCIA, conta, cpf_usuario)
-
     # Operação de depósito
     elif op.lower() == 'd':
         try:
@@ -111,8 +117,7 @@ while True:
             saldo, extrato = depositar(valor, saldo, extrato)
         except:
             print("Ocorreu algum erro. Tente novamente.")
-        
-       
+
     # Operação de saque
     elif op.lower() == 's':
         try:
@@ -122,10 +127,35 @@ while True:
             print("Ocorreu algum erro. Tente novamente.")
 
     # Impressão do extrato
-    elif op.lower() == 'e':        
-        mostra_extrato(saldo, extrato=extrato)
+    elif op.lower() == 'e':
+        try:     
+            mostra_extrato(saldo, extrato=extrato)
+        except:
+            print("Ocorreu algum erro. Tente novamente.")
+
+    # Criação de novo usuário
+    elif op.lower() == 'nu':
+        try:
+            criar_usuario()
+        except:
+            print("Ocorreu algum erro. Tente novamente.")
+
+    # Criação de nova conta
+    elif op.lower() == 'nc':
+        try:
+            cpf_usuario = input("Informe o CPF do usuário:")
+            usuario = consulta_usuario(cpf_usuario)
+            criar_conta(AGENCIA, num_conta, usuario)
+        except:
+            print("Ocorreu algum erro. Tente novamente.")
+
+    # Listar as contas criadas
+    elif op.lower() == 'lc':
+        try:
+            listar_contas()
+        except:
+            print("Ocorreu algum erro. Tente novamente.")
 
     # Operação selecionada inválida
     else:
         print("\nOperação inválida. Tente novamente.")
-
