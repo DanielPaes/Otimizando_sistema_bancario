@@ -99,63 +99,67 @@ def listar_contas():
         print('-'*36)
         print(dados_conta)
 
-# Código principal
+# Função principal
 
-while True:
+def main(saldo, extrato, limite_valor_saque, qtd_saques, limite__qtd_saques):
 
-    # Leitura da operação que será executada.
-    op = input(mensagem)
+    while True:
 
-    # Sai do do programa
-    if op.lower() == 'q':
-        break
+        # Leitura da operação que será executada.
+        op = input(mensagem)
 
-    # Operação de depósito
-    elif op.lower() == 'd':
-        try:
-            valor = float(input("\nInforme o valor do depósito: "))
-            saldo, extrato = depositar(valor, saldo, extrato)
-        except:
-            print("Ocorreu algum erro. Tente novamente.")
+        # Sai do do programa
+        if op.lower() == 'q':
+            break
 
-    # Operação de saque
-    elif op.lower() == 's':
-        try:
-            valor =  float(input("\nInforme o valor de saque: "))
-            saldo, extrato, qtd_saques = sacar(valor=valor, saldo=saldo, extrato=extrato, limite_valor_saque=limite_valor_saque, qtd_saques= qtd_saques, limite__qtd_saques = limite__qtd_saques)
-        except:
-            print("Ocorreu algum erro. Tente novamente.")
+        # Operação de depósito
+        elif op.lower() == 'd':
+            try:
+                valor = float(input("\nInforme o valor do depósito: "))
+                saldo, extrato = depositar(valor, saldo, extrato)
+            except:
+                print("Ocorreu algum erro. Tente novamente.")
 
-    # Impressão do extrato
-    elif op.lower() == 'e':
-        try:     
-            mostra_extrato(saldo, extrato=extrato)
-        except:
-            print("Ocorreu algum erro. Tente novamente.")
+        # Operação de saque
+        elif op.lower() == 's':
+            try:
+                valor =  float(input("\nInforme o valor de saque: "))
+                saldo, extrato, qtd_saques = sacar(valor=valor, saldo=saldo, extrato=extrato, limite_valor_saque=limite_valor_saque, qtd_saques= qtd_saques, limite__qtd_saques = limite__qtd_saques)
+            except:
+                print("Ocorreu algum erro. Tente novamente.")
 
-    # Criação de novo usuário
-    elif op.lower() == 'nu':
-        try:
-            criar_usuario()
-        except:
-            print("Ocorreu algum erro. Tente novamente.")
+        # Impressão do extrato
+        elif op.lower() == 'e':
+            try:     
+                mostra_extrato(saldo, extrato=extrato)
+            except:
+                print("Ocorreu algum erro. Tente novamente.")
 
-    # Criação de nova conta
-    elif op.lower() == 'nc':
-        try:
-            cpf_usuario = input("Informe o CPF do usuário:")
-            usuario = consulta_usuario(cpf_usuario)
-            criar_conta(AGENCIA, num_conta, usuario)
-        except:
-            print("Ocorreu algum erro. Tente novamente.")
+        # Criação de novo usuário
+        elif op.lower() == 'nu':
+            try:
+                criar_usuario()
+            except:
+                print("Ocorreu algum erro. Tente novamente.")
 
-    # Listar as contas criadas
-    elif op.lower() == 'lc':
-        try:
-            listar_contas()
-        except:
-            print("Ocorreu algum erro. Tente novamente.")
+        # Criação de nova conta
+        elif op.lower() == 'nc':
+            try:
+                cpf_usuario = input("Informe o CPF do usuário:")
+                usuario = consulta_usuario(cpf_usuario)
+                criar_conta(AGENCIA, num_conta, usuario)
+            except:
+                print("Ocorreu algum erro. Tente novamente.")
 
-    # Operação selecionada inválida
-    else:
-        print("\nOperação inválida. Tente novamente.")
+        # Listar as contas criadas
+        elif op.lower() == 'lc':
+            try:
+                listar_contas()
+            except:
+                print("Ocorreu algum erro. Tente novamente.")
+
+        # Operação selecionada inválida
+        else:
+            print("\nOperação inválida. Tente novamente.")
+
+main(saldo, extrato, limite_valor_saque, qtd_saques, limite__qtd_saques)
